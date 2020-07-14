@@ -1,11 +1,11 @@
-# SSB-VAE
-Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing
-
+# SSB-VAE: Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing
 
 This repository contains the code to reproduce the results presented in the paper 
 *Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing*.
 
-we investigate the robustness of hashing methods based on variational autoencoders 
+# Description
+
+We investigate the robustness of hashing methods based on variational autoencoders 
 to the lack of supervision, focusing on two semi-supervised approaches currently in use. 
 The first augments the training objective of the variational autoencoder to jointly model 
 the distribution over the data and the class labels. The second approach exploits the 
