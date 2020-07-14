@@ -134,7 +134,6 @@ def run_CIFAR(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_
         vae.fit(X_total_input, [X_total, Y_total_input], epochs=30, batch_size=batch_size,verbose=1)
         name_model = 'SSB_VAE'
 
-    toc = time.perf_counter()
 
     print("\n=====> Evaluate the Models ... \n")
 
@@ -148,7 +147,7 @@ def run_CIFAR(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_
         total_hash, test_hash = hash_data(encoder,X_total_input,X_test_input)
     
 
-    p100_b,r100_b = evaluate_hashing_DE(labels,total_hash test_hash,labels_total,labels_test,tipo="topK")
+    p100_b,r100_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK")
     p5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=5000)
     p1000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=1000)
     map5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="MAP",K=5000)

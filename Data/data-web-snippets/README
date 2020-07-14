@@ -1,0 +1,24 @@
+Training and test data as Google search snippets
+
+Traning data: 
+    File: train.txt
+    Size: 10,060 snippets
+    
+Test data:
+    File: test.txt
+    Size: 2,280 snippets
+
+Format: 
+    Each snippet on each line
+    Each snippet consists of a list of words/terms plus a class label at the end
+
+8 domains (class labels):
+    Business
+    Computers
+    Culture-Arts-Entertainment
+    Education-Science
+    Engineering
+    Health
+    Politics-Society
+    Sports
+    

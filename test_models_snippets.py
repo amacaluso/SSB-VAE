@@ -189,7 +189,7 @@ def run_snippets(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gam
         vae.fit(X_total_input, [X_total, Y_total_input], epochs=30, batch_size=batch_size,verbose=1)
         name_model = 'SSB_VAE'
 
-    toc = time.perf_counter()
+    # toc = time.perf_counter()
 
     print("\n=====> Evaluate the Models ... \n")
 
@@ -203,7 +203,7 @@ def run_snippets(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gam
         total_hash, test_hash = hash_data(encoder,X_total_input,X_test_input)
     
 
-    p100_b,r100_b = evaluate_hashing_DE(labels,total_hash test_hash,labels_total,labels_test,tipo="topK")
+    p100_b,r100_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK")
     p5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=5000)
     p1000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=1000)
     map5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="MAP",K=5000)
@@ -249,8 +249,8 @@ seeds_to_reseed = [20,144,1028,2044,101,6077,621,1981,2806,79]
 for rep in range(opts.repetitions):
     if opts.reseed > 0:
         new_seed = seeds_to_reseed[rep%len(seeds_to_reseed)]
-        run_snippets(unsup_model=opts.model,percentage_supervision=ps,nbits_for_hashing=opts.length_codes,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=new_seed)
+        run_snippets(opts.model,percentage_supervision=ps,nbits_for_hashing=opts.length_codes,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=new_seed)
     else:
-        run_snippets(unsup_model=opts.model,percentage_supervision=ps,nbits_for_hashing=opts.length_codes,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=20)
+        run_snippets(opts.model,percentage_supervision=ps,nbits_for_hashing=opts.length_codes,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=20)
 
 

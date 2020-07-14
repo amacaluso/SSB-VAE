@@ -136,8 +136,7 @@ def run_20_news(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamm
 
 		total_hash, test_hash = hash_data(encoder,X_total_input,X_test_input)
 	
-
-	p100_b,r100_b = evaluate_hashing_DE(labels,total_hash test_hash,labels_total,labels_test,tipo="topK")
+	p100_b,r100_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK")
 	p5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=5000)
 	p1000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="Patk",K=1000)
 	map5000_b = evaluate_hashing_DE(labels,total_hash, test_hash,labels_total,labels_test,tipo="topK",eval_tipo="MAP",K=5000)
@@ -184,7 +183,7 @@ seeds_to_reseed = [20,144,1028,2044,101,6077,621,1981,2806,79]
 for rep in range(opts.repetitions):
 	if opts.reseed > 0:
 		new_seed = seeds_to_reseed[rep%len(seeds_to_reseed)]
-		run_20_news(unsup_model=opts.model,percentage_supervision=ps,nbits_for_hashing=nbits,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=new_seed)
+		run_20_news(opts.model,percentage_supervision=ps,nbits_for_hashing=nbits,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=new_seed)
 	else:
-		run_20_news(unsup_model=opts.model,percentage_supervision=ps,nbits_for_hashing=nbits,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=20)
+		run_20_news(opts.model,percentage_supervision=ps,nbits_for_hashing=nbits,alpha_val=opts.alpha,gamma_val=opts.gamma,beta_VAL=opts.beta,name_file=opts.ofilename,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=20)
 
