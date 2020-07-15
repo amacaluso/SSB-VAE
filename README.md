@@ -53,12 +53,13 @@ The script base_networks.py contains the custom routines to define all the compo
 
 The script supervised_BAE.py defines the three types of autoencoder (*VDSH, PHS. SSB-VAE*).
 
+The *.sh files allow to run the all the experiments reported in the paper. In particular, 
+ the test_all_[**data**]-[**l**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*), 
+ given a dataset (**data**) and the number of bits **l**, for different levels of supervision *p = 0.1, 0.2, ... , 0.9, 1.0*
+
 The script post_processing.py allows to collect all the results provided by the *.sh files and it computes the
  tables as reported in the paper.
- 
- Finally the *.sh files allow to run the all the experiments reported in the paper. In particular, 
- the test_all_[**data**]-[**n**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*)
- for *p = 0.1, 0.2, ... , 0.9, 1.0*
+
 
 ## Requirements
 
@@ -68,7 +69,7 @@ Tensorflow 2.1
 
 ## Execution
 
-In oder to obtain the results reported in the paper it is necessary execute all the *.sh files as follows:  
+In order to obtain the results reported in the paper it is necessary execute all the *.sh files as follows:  
   ```
 # run all *.sh files
 ./test_all_20news-16bits.sh
@@ -83,8 +84,8 @@ In oder to obtain the results reported in the paper it is necessary execute all 
 ```
 
 At the end of the computation, the csv files containing the results are generated according to the *-o*
-parameter. Finally the script post_processing.py collect all the csv and save a csv havinf the same format 
- of the two table reported in the paper
+parameter. Finally the script post_processing.py collects all the csv and save a new csv having the same format 
+ of the two table reported in the paper.
 
 ## References
 <a id="1">[1]</a> 
