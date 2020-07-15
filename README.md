@@ -47,8 +47,8 @@ The script base_networks.py contains the custom routines to define all the compo
 The script supervised_BAE.py defines the three types of autoencoder (*VDSH, PHS. SSB-VAE*).
 
 The *.sh files allow to run the all the experiments reported in the paper. In particular, 
- the test_all_[**data**]-[**l**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*), 
- given a dataset (**data**) and the number of bits **l**, for different levels of supervision *p = 0.1, 0.2, ... , 0.9, 1.0*
+ the test_all_[**data**]-[**n**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*), 
+ given a dataset (**data**) and the number of bits **n**, for different levels of supervision *p = 0.1, 0.2, ... , 0.9, 1.0*
 
 The script post_processing.py allows to collect all the results provided by the *.sh files and it computes the
  tables as reported in the paper.
