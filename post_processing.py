@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 measure = 'p@100'
-nbits = 16
+nbits = 32
 
 def load_data(nbits=32, folder="./", ext='.csv'):
     data = pd.DataFrame()

@@ -60,9 +60,9 @@ The script post_processing.py allows to collect all the results provided by the 
  the test_all_[**data**]-[**n**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*)
  for *p = 0.1, 0.2, ... , 0.9, 1.0*
 
---> Tuning parameters
+[--> Tuning parameters](#)
 
---> Requirements
+[--> Requirements: tf2.0.0](#)
 
 
 ## References
