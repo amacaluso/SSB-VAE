@@ -1,7 +1,7 @@
 # SSB-VAE: Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing
 
 This repository contains the code to reproduce the results presented in the paper 
-*Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing*.
+[*Self-Supervised Bernoulli Autoencoders for Semi-Supervised Hashing*](https://arxiv.org/abs/2007.08799).
 
 # Description
 
