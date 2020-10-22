@@ -44,7 +44,7 @@ The script utils.py is used to import the needed packages and all of the custom 
 
 The script base_networks.py contains the custom routines to define all the components of a neural networks.
 
-The script supervised_BAE.py defines the three types of autoencoder (*VDSH, PHS. SSB-VAE*).
+The script supervised_BAE.py defines the three types of autoencoder (*VDSH, PHS, SSB-VAE*).
 
 The *.sh files allow to run the all the experiments reported in the paper. In particular, 
  the test_all_[**data**]-[**n**]bits.sh compute *r* times the prediction of the three methods (*VDSH, PHS. SSB-VAE*), 
