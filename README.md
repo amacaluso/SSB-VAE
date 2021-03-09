@@ -13,7 +13,6 @@ baseline, this procedure yields similar performance in
 fully-supervised settings but improves significantly the results when labelled data is scarce.
 
 
-
 # Usage
 
 The code is organised in four different scripts, one per dataset. 
