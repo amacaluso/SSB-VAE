@@ -9,7 +9,7 @@ from utils import *
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from nltk.stem.snowball import SnowballStemmer
-from nltk.stem import WordNetLemmatizer 
+from nltk.stem import WordNetLemmatizer
 from keras.utils import to_categorical
 from sklearn import preprocessing
 
@@ -105,31 +105,39 @@ def load_data(percentage_supervision,addval=1,reseed=0,seed_to_reseed=20):
 
     return n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input
 
-
-def run_TMC(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_val,beta_VAL,name_file, addval,reseed,seed_to_reseed, n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input):
+#MODIFICA ESEGUITA
+#Vecchia versione: def run_TMC(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_val,beta_VAL,name_file, addval,reseed,seed_to_reseed, n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input):
+#Sostituisci gamma_val con lambda_val
+def run_TMC(model_id,percentage_supervision,nbits_for_hashing,alpha_val,lambda_val,beta_VAL,name_file, addval,reseed,seed_to_reseed, n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input):
  
     #Creating and Training the Models 
 
     tf.keras.backend.clear_session()
 
-    batch_size = 100
+    batch_size = 512
 
     if model_id == 1:
 
         vae,encoder,generator = VDSHS(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val)
-        vae.fit(X_total_input, [X_total, Y_total_input], epochs=30, batch_size=batch_size,verbose=1)
+        vae.fit(X_total_input, [X_total, Y_total_input], epochs=10, batch_size=batch_size,verbose=1)
         name_model = 'VDSH_S'
 
     elif model_id == 2:
 
-        vae,encoder,generator = PSH_GS(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,gamma=gamma_val)
-        vae.fit(X_total_input, [X_total, Y_total_input], epochs=30, batch_size=batch_size,verbose=1)
+        #MODIFICA ESEGUITA
+		#Vecchia versione: vae,encoder,generator = PSH_GS(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,gamma=gamma_val)
+		#Sostituisci gamma con lambda_ , e gamma_val con lambda_val
+        vae,encoder,generator = PSH_GS(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,lambda_=lambda_val)
+        vae.fit(X_total_input, [X_total, Y_total_input], epochs=10, batch_size=batch_size,verbose=1)
         name_model = 'PHS_GS'
 
     elif model_id == 3:
 
-        vae,encoder,generator = SSBVAE(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,gamma=gamma_val)
-        vae.fit(X_total_input, [X_total, Y_total_input], epochs=30, batch_size=batch_size,verbose=1)
+        #MODIFICA ESEGUITA
+		#Vecchia versione: vae,encoder,generator = SSBVAE(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,gamma=gamma_val)
+		#Sostituisci gamma con lambda_ , e gamma_val con lambda_val
+        vae,encoder,generator = SSBVAE(X_total.shape[1],n_classes,Nb=int(nbits_for_hashing),units=500,layers_e=2,layers_d=0,beta=beta_VAL,alpha=alpha_val,lambda_=lambda_val)
+        vae.fit(X_total_input, [X_total, Y_total_input], epochs=10, batch_size=batch_size,verbose=1)
         name_model = 'SSB_VAE'
 
 
@@ -154,9 +162,12 @@ def run_TMC(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_va
 
     file = open(name_file,"a")
 
-    #colnames 
-    #'dataset', 'algorithm', 'level', 'alpha', 'beta', 'gamma', 'p@100', 'r@100', 'p@1000', 'p@5000', 'map@100', 'map@1000', 'map@5000','added_val_flag','seed_used'
-    file.write("%s, %s, %f, %f, %f, %f, %f, %f, %f,  %f, %f, %f, %f, %d, %d\n"%(name_dat,name_model,percentage_supervision,alpha_val,beta_VAL,gamma_val,p100_b,r100_b,p1000_b,p5000_b,map100_b,map1000_b,map5000_b,addval,seed_to_reseed))
+    #colnames  - Modifica Eseguita al commento: Sostituitoa gamma con lambda_
+    #'dataset', 'algorithm', 'level', 'alpha', 'beta', 'lambda_', 'p@100', 'r@100', 'p@1000', 'p@5000', 'map@100', 'map@1000', 'map@5000','added_val_flag','seed_used'
+    #MODIFICA ESEGUITA
+    #Vecchia versione: file.write("%s, %s, %f, %f, %f, %f, %f, %f, %f,  %f, %f, %f, %f, %d, %d\n"%(name_dat,name_model,percentage_supervision,alpha_val,beta_VAL,gamma_val,p100_b,r100_b,p1000_b,p5000_b,map100_b,map1000_b,map5000_b,addval,seed_to_reseed))
+    #Sostituisci gamma_val con lambda_val
+    file.write("%s, %s, %f, %f, %f, %f, %f, %f, %f,  %f, %f, %f, %f, %d, %d\n"%(name_dat,name_model,percentage_supervision,alpha_val,beta_VAL,lambda_val,p100_b,r100_b,p1000_b,p5000_b,map100_b,map1000_b,map5000_b,addval,seed_to_reseed))
     file.close()
 
 
@@ -167,34 +178,37 @@ def run_TMC(model_id,percentage_supervision,nbits_for_hashing,alpha_val,gamma_va
 
 
 import sys
-from optparse import OptionParser
+#from optparse import OptionParser
 
-op = OptionParser()
-op.add_option("-M", "--model", type=int, default=4, help="model type (1,2,3)")
-op.add_option("-p", "--ps", type=float, default=1.0, help="supervision level (float[0.1,1.0])")
-op.add_option("-a", "--alpha", type=float, default=0.0, help="alpha value")
-op.add_option("-b", "--beta", type=float, default=0.000244, help="beta value")
-op.add_option("-g", "--gamma", type=float, default=0.0, help="gamma value")
-op.add_option("-r", "--repetitions", type=int, default=1, help="repetitions") 
-op.add_option("-o", "--ofilename", type="string", default="results.csv", help="output filename") 
-op.add_option("-s", "--reseed", type=int, default=0, help="if >0 reseed numpy for each repetition") 
-op.add_option("-v", "--addvalidation", type=int, default=1, help="if >0 add the validation set to the train set") 
-op.add_option("-l", "--length_codes", type=int, default=32, help="number of bits") 
+#op = OptionParser()
+#op.add_option("-M", "--model", type=int, default=4, help="model type (1,2,3)")
+#op.add_option("-p", "--ps", type=float, default=1.0, help="supervision level (float[0.1,1.0])")
+#op.add_option("-a", "--alpha", type=float, default=0.0, help="alpha value")
+#op.add_option("-b", "--beta", type=float, default=0.000244, help="beta value")
+#op.add_option("-l", "--lambda_", type=float, default=0.0, help="lambda value")
+#op.add_option("-r", "--repetitions", type=int, default=1, help="repetitions")
+#op.add_option("-o", "--ofilename", type="string", default="results.csv", help="output filename")
+#op.add_option("-s", "--reseed", type=int, default=0, help="if >0 reseed numpy for each repetition")
+#op.add_option("-v", "--addvalidation", type=int, default=1, help="if >0 add the validation set to the train set")
+#op.add_option("-c", "--length_codes", type=int, default=32, help="number of bits")
 
-(opts, args) = op.parse_args()
+#(opts, args) = op.parse_args()
 
-seeds_to_reseed = [20,144,1028,2044,101,6077,621,1981,2806,79]
+def testtmc(model,ps, addvalidation, alpha, beta, lambda_, repetitions, nbits,  ofilename, reseed=0):
 
-if opts.reseed > 0:
-    for rep in range(opts.repetitions):
-        new_seed = seeds_to_reseed[rep%len(seeds_to_reseed)]
-        n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input = load_data(opts.ps,addval=opts.addvalidation,reseed=opts.reseed,seed_to_reseed=new_seed)
-        run_TMC(opts.model,opts.ps,opts.length_codes,opts.alpha,opts.gamma,opts.beta,opts.ofilename,opts.addvalidation,opts.reseed,new_seed,n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input)
-        del n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input
-        gc.collect()
-else:
+    seeds_to_reseed = [20,144,1028,2044,101,6077,621,1981,2806,79]
+    nbits = int(nbits)
 
-    n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input = load_data(opts.ps,addval=opts.addvalidation,reseed=0,seed_to_reseed=20)
-    for rep in range(opts.repetitions):
-        run_TMC(opts.model,opts.ps,opts.length_codes,opts.alpha,opts.gamma,opts.beta,opts.ofilename,opts.addvalidation,0,20,n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input)
+    if reseed > 0:
+        for rep in range(repetitions):
+            new_seed = seeds_to_reseed[rep%len(seeds_to_reseed)]
+            n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input = load_data(ps,addval=addvalidation,reseed=reseed,seed_to_reseed=new_seed)
+            run_TMC(model,ps,nbits,alpha,lambda_,beta,ofilename,addvalidation,reseed,new_seed,n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input)
+            del n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input
+            gc.collect()
+    else:
+
+        n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input = load_data(ps,addval=addvalidation,reseed=0,seed_to_reseed=20)
+        for rep in range(repetitions):
+            run_TMC(model,ps,nbits,alpha,lambda_,beta,ofilename,addvalidation,0,20,n_classes, labels, labels_total, labels_test, X_total, X_test, X_total_input, X_test_input, Y_total_input)
 

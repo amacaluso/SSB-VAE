@@ -165,7 +165,7 @@ def binary_VAE(data_dim,Nb,units,layers_e,layers_d,opt='adam',BN=True, summ=True
         return binary_vae, encoder,generator
 
 
-def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, summ=True,tau_ann=False,beta=0,alpha=1.0,gamma=1.0,multilabel=False):
+def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, summ=True,tau_ann=False,beta=0,alpha=1.0,lambda_=1.0,multilabel=False):
     if tau_ann:
         tau = K.variable(1.0, name="temperature") 
     else:
@@ -181,13 +181,9 @@ def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
         generator.summary()
 
     x = Input(shape=(data_dim,))
-    #y = Input(shape=(n_classes,))
 
     hidden = pre_encoder(x)
-    logits_b  = Dense(Nb, activation='linear', name='logits-b')(hidden) #log(B_j/1-B_j)
-    #proba = np.exp(logits_b)/(1+np.exp(logits_b)) = sigmoidal(logits_b) <<<<<<<<<< recupera probabilidad
-    #dist = Dense(Nb, activation='sigmoid')(hidden) #p(b) #otra forma de modelarlo
-    
+    logits_b  = Dense(Nb, activation='linear', name='logits-b')(hidden)
     if multilabel:
         supervised_layer = Dense(n_classes, activation='sigmoid',name='sup-class')(hidden)#req n_classes  
     else:
@@ -207,8 +203,6 @@ def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
     kl_loss = BKL_loss(logits_b)
 
     def SUP_BAE_loss_pointwise(y_true, y_pred):
-        #supervised_loss = keras.losses.categorical_crossentropy(y, supervised_layer)#req y 
-        #return alpha*supervised_loss + Recon_loss(y_true, y_pred) + beta*kl_loss(y_true, y_pred)
         return Recon_loss(y_true, y_pred) + beta*kl_loss(y_true, y_pred)
 
     margin = Nb/3.0
@@ -219,8 +213,7 @@ def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
         pred_loss = my_KL_loss
 
     def Hamming_loss(y_true, y_pred):
-        
-        #pred_loss = keras.losses.categorical_crossentropy(y_true, y_pred)
+
         r = tf.reduce_sum(b_sampled*b_sampled, 1)
         r = tf.reshape(r, [-1, 1])
         D = r - 2*tf.matmul(b_sampled, tf.transpose(b_sampled)) + tf.transpose(r) #BXB
@@ -228,7 +221,7 @@ def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
         similar_mask = K.dot(y_true, K.transpose(y_true)) #BXB  M_ij = I(y_i = y_j)  
         loss_hamming = (1.0/Nb)*K.sum(similar_mask*D + (1.0-similar_mask)*K.relu(margin-D))
 
-        return gamma*pred_loss(y_true, y_pred) + loss_hamming
+        return lambda_*pred_loss(y_true, y_pred) + loss_hamming
 
     #binary_vae = Model(inputs=[x,y], outputs=output)
     #binary_vae.compile(optimizer=opt, loss=SUP_BAE_loss_pointwise, metrics=[Recon_loss,kl_loss])
@@ -241,7 +234,7 @@ def PSH_GS(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
     else:
         return binary_vae, encoder,generator
 
-def SSBVAE(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, summ=True,tau_ann=False,beta=0,alpha=1.0,gamma=1.0,multilabel=False):
+def SSBVAE(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, summ=True,tau_ann=False,lambda_=0,alpha=1.0,beta=1.0,multilabel=False):
     if tau_ann:
         tau = K.variable(1.0, name="temperature") 
     else:
@@ -257,13 +250,10 @@ def SSBVAE(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
         generator.summary()
 
     x = Input(shape=(data_dim,))
-    #y = Input(shape=(n_classes,))
 
     hidden = pre_encoder(x)
     logits_b  = Dense(Nb, activation='linear', name='logits-b')(hidden) #log(B_j/1-B_j)
-    #proba = np.exp(logits_b)/(1+np.exp(logits_b)) = sigmoidal(logits_b) <<<<<<<<<< recupera probabilidad
-    #dist = Dense(Nb, activation='sigmoid')(hidden) #p(b) #otra forma de modelarlo
-    
+
     if multilabel:
         supervised_layer = Dense(n_classes, activation='sigmoid',name='sup-class')(hidden)#req n_classes  
     else:
@@ -283,9 +273,8 @@ def SSBVAE(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
     kl_loss = BKL_loss(logits_b)
 
     def SUP_BAE_loss_pointwise(y_true, y_pred):
-        #supervised_loss = keras.losses.categorical_crossentropy(y, supervised_layer)#req y 
-        #return alpha*supervised_loss + Recon_loss(y_true, y_pred) + beta*kl_loss(y_true, y_pred)
-        return Recon_loss(y_true, y_pred) + beta*kl_loss(y_true, y_pred)
+
+        return Recon_loss(y_true, y_pred) + lambda_*kl_loss(y_true, y_pred)
 
     margin = Nb/3.0
 
@@ -304,14 +293,12 @@ def SSBVAE(data_dim,n_classes,Nb,units,layers_e,layers_d,opt='adam',BN=True, sum
         similar_mask = K.dot(y_pred, K.transpose(y_pred)) #BXB  M_ij = I(y_i = y_j)  
         loss_hamming = (1.0/Nb)*K.sum(similar_mask*D + (1.0-similar_mask)*K.relu(margin-D))
 
-        return gamma*pred_loss(y_true, y_pred) + loss_hamming
+        return beta*pred_loss(y_true, y_pred) + alpha*loss_hamming
 
-    #binary_vae = Model(inputs=[x,y], outputs=output)
-    #binary_vae.compile(optimizer=opt, loss=SUP_BAE_loss_pointwise, metrics=[Recon_loss,kl_loss])
 
     binary_vae = Model(inputs=x, outputs=[output,supervised_layer])
-    binary_vae.compile(optimizer=opt, loss=[SUP_BAE_loss_pointwise,Hamming_loss],loss_weights=[1., alpha], metrics=[Recon_loss,kl_loss,pred_loss])
 
+    binary_vae.compile(optimizer=opt, loss=[SUP_BAE_loss_pointwise,Hamming_loss],loss_weights=[1., 1.], metrics=[Recon_loss,kl_loss,pred_loss])
     if tau_ann:
         return binary_vae, encoder,generator ,tau
     else:

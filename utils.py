@@ -579,3 +579,24 @@ def find_lambda(create_model, X_source_inp, X_source_out, X_query_input, labels_
     print("***************************************")
 
     return lambda_try[idx_max] #lambda select
+
+#To get parameter to try various settings
+def obtain_parameters(p,df, nbits):
+    filename = 'Hyperparameters/' + df +"_" + str(nbits) +'bits_hyperparameters.csv'
+
+    table = pd.read_csv(filename, sep=',', error_bad_lines=False)
+    x = table.drop(['algorithm','p@100'], axis=1)
+
+    #to take the only necessary lines, not taking into account the previous ones (Old analyzes)
+    end = int(x.shape[0])
+    start = end - 30
+    x = x.iloc[start:end]
+
+    #Select the level and create float64 lists of parameters to work on
+    y = x[x['level'] ==  str(p)]
+    alpha = y['alpha'].to_numpy()
+    beta = y['beta'].to_numpy()
+    lambda_ = y['lambda'].to_numpy()
+
+    return alpha, beta, lambda_
+
