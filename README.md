@@ -14,8 +14,6 @@ fully-supervised settings but improves significantly the results when labelled d
 Then we can search for the best hyper-parameters through a grid search which tries different set of values 
 and generates new values based on the precision achieved on the training.
 
-Note: this is an extension of the work contained in this [*directory*](https://github.com/amacaluso/SSB-VAE).
-
 # Requirements
 
 Python 3.7
@@ -108,7 +106,7 @@ across the tests but we had chosen similar values, so perhaps this measure could
 The new values are generated in order to explore the space around the best hyper-parameters (i.e. the highest precisions), in this way after many trainings we can achieve a
 better and better result for each dataset and level of supervision.
 
-Important note: we extended the work contained in this [*directory*](https://github.com/amacaluso/SSB-VAE), therefore we focused only on the SSB-VAE method, and the results
+Important note: we focused only on the SSB-VAE method, and the results
 achieved refer all to this model, for the other ones a small change in the code is recommeded in order to not mix the results from different models.
 
 # References
@@ -119,6 +117,6 @@ achieved refer all to this model, for the other ones a small change in the code 
 
 # Collaborators
 
-The changes to the original [*directory*](https://github.com/amacaluso/SSB-VAE) have been made by:
+The changes to the original [*directory*] have been made by:
 - [*Damiano Bolognini*](https://github.com/bolopenguin)
 - [*Giulio Todde*](https://github.com/tox16)
