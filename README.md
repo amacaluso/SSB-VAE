@@ -39,8 +39,8 @@ the following parameters:
 
 - *p* is the level (percentage) of supervision to consider when training the autoencoder based on semi-supervised approach.
 - *a*, *b* and *l* a,b,l are the hyperparameters associated to the different components of the semi-supervised
- loss. In particular, *a* is the coefficient of the pointwise component, *l* is associated to the pairwise component 
- and *b* is the weight associated to the KL divergence when computing the unsupervised loss
+ loss. In particular, *a* is the coefficient of the pointwise component, *b* is associated to the pairwise component 
+ and *l* is the weight associated to the KL divergence when computing the unsupervised loss
 - *r* is the number of experiments to perform, given a set of parameters. This is used to compute an average performance
 considering multiple initialisation of the same neural network. Notice that the results reported in the paper are 
 computing by averaging *r=5* experiments.
